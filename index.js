@@ -1,7 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-// const boardMembers = require("./routes/boardMembers");
-// const contact = require("./routes/contact");
 const leadRoutes = require("./routes/lead")
 const mongoose = require("mongoose");
 const app = express();
@@ -9,7 +7,7 @@ app.use(
   cors({
     origin: function (origin, callback) {
       const allowedOrigins = [
-        "http://localhost:3000","https://algo-match-frontend-git-main-brandsmashers-projects.vercel.app/","https://algo-match-frontend-brandsmashers-projects.vercel.app/"
+        "http://localhost:3000","https://algo-match-frontend-git-main-brandsmashers-projects.vercel.app/","https://algo-match-frontend-brandsmashers-projects.vercel.app/","https://algo-match-frontend-git-main-brandsmashers-projects.vercel.app"
       ];
       if (!origin) return callback(null, true);
       if (allowedOrigins.indexOf(origin) !== -1) {
@@ -51,9 +49,7 @@ main();
 app.get("/", (req, res) => {
   res.json({ message: "Server is running!" });
 });
-// app.use("/boardMembers", boardMembers);
-// app.use("/contact", contact);
-// app.use("/uploads", express.static("uploads"));
+
 app.use('/api/leads', leadRoutes); 
 
 const PORT = process.env.PORT || 5000;
