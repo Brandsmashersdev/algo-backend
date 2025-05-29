@@ -7,7 +7,7 @@ app.use(
   cors({
     origin: function (origin, callback) {
       const allowedOrigins = [
-        "http://localhost:3000","https://algo-match-frontend-brandsmashers-projects.vercel.app","https://algo-match-frontend-git-main-brandsmashers-projects.vercel.app"
+        "http://localhost:3000","https://algo-match-frontend-brandsmashers-projects.vercel.app","https://algo-match-frontend-git-main-brandsmashers-projects.vercel.app",""
       ];
       if (!origin) return callback(null, true);
       if (allowedOrigins.indexOf(origin) !== -1) {
