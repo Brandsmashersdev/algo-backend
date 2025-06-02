@@ -1,32 +1,45 @@
-const Leads = require('../models/lead'); // Adjust the path as needed
+const Leads = require('../models/lead');
+
 
 exports.createLead = async (req, res) => {
   try {
     console.log('Received lead data:', req.body);
+    const { name, email, resume } = req.body;
 
-    // Create a new lead instance with request data
+    if (!name || !email || !resume) {
+      return res.status(400).json({
+        message: 'Name, email, and resume URL are required.',
+      });
+    }
+    req.body.email = email.trim().toLowerCase();
+
     const newLead = new Leads(req.body);
-
-    // Save to DB
     const savedLead = await newLead.save();
 
-    // Send success response
-    res.status(201).json({
+    return res.status(201).json({
       message: 'Lead created successfully',
       data: savedLead,
     });
   } catch (error) {
     console.error('Error creating lead:', error);
 
-    // Handle duplicate email error (unique constraint)
-    if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
-      return res.status(400).json({
+    if (error.code === 11000 && error.keyPattern?.email) {
+      return res.status(409).json({
         message: 'Email already exists',
       });
     }
 
-    res.status(500).json({
-      message: 'Failed to create lead',
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map((err) => err.message);
+      return res.status(400).json({
+        message: 'Validation failed',
+        errors: messages,
+      });
+    }
+
+    // General server error fallback
+    return res.status(500).json({
+      message: 'An error occurred while creating the lead',
       error: error.message,
     });
   }
